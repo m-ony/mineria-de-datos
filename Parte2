@@ -48,13 +48,13 @@
     },
     {
       "cell_type": "code",
-      "execution_count": 2,
+      "execution_count": 1,
       "metadata": {
         "id": "IYPkGHlvU_Up",
         "colab": {
           "base_uri": "https://localhost:8080/"
         },
-        "outputId": "9159c94a-7e28-4dcd-e7ec-be0a378c00e2"
+        "outputId": "f4a73cff-92b9-439b-b0d5-f1689c51d587"
       },
       "outputs": [
         {
@@ -77,9 +77,9 @@
             "Requirement already satisfied: wrapt in /usr/local/lib/python3.13/dist-packages (from smart_open>=1.8.1->gensim) (2.4.0)\n",
             "Requirement already satisfied: cloudpickle>=3.0 in /usr/local/lib/python3.13/dist-packages (from joblib->nltk) (3.1.2)\n",
             "Downloading gensim-4.4.0-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (27.8 MB)\n",
-            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m27.8/27.8 MB\u001b[0m \u001b[31m44.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m27.8/27.8 MB\u001b[0m \u001b[31m58.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
             "\u001b[?25hDownloading nltk-3.10.3-py3-none-any.whl (1.8 MB)\n",
-            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.8/1.8 MB\u001b[0m \u001b[31m64.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.8/1.8 MB\u001b[0m \u001b[31m50.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
             "\u001b[?25hInstalling collected packages: nltk, gensim\n",
             "  Attempting uninstall: nltk\n",
             "    Found existing installation: nltk 3.9.1\n",
@@ -139,20 +139,20 @@
     },
     {
       "cell_type": "code",
-      "execution_count": null,
+      "execution_count": 2,
       "metadata": {
         "id": "3kmCoxuiU_Us",
         "colab": {
           "base_uri": "https://localhost:8080/"
         },
-        "outputId": "3110eb13-3b40-4f09-cdd9-491960d3bbac"
+        "outputId": "764aa2bd-b795-4fc9-be2e-ab310fc75a26"
       },
       "outputs": [
         {
           "output_type": "stream",
           "name": "stdout",
           "text": [
-            "Cargando archivo local: 2000.txt...\n",
+            "Cargando archivo local: 2000...\n",
             "Preprocesando el texto...\n",
             "Entrenando modelo Word2Vec...\n",
             "¡Modelo Word2Vec propio entrenado con éxito!\n"
@@ -162,7 +162,7 @@
       "source": [
         "import os\n",
         "\n",
-        "nombre_archivo = \"2000.txt\" # Asegúrate de que se llame exactamente así o cámbialo\n",
+        "nombre_archivo = \"2000\" # Asegúrate de que se llame exactamente así o cámbialo\n",
         "\n",
         "if not os.path.exists(nombre_archivo):\n",
         "    raise FileNotFoundError(f\"❌ ERROR: No se encontró el archivo '{nombre_archivo}'. Asegúrate de subirlo a tu panel izquierdo en Colab.\")\n",
@@ -196,13 +196,13 @@
     },
     {
       "cell_type": "code",
-      "execution_count": 3,
+      "execution_count": 7,
       "metadata": {
         "id": "X-2a-4JPU_Uu",
         "colab": {
           "base_uri": "https://localhost:8080/"
         },
-        "outputId": "c1c0b0b3-1390-4ca0-c7ec-814718bd31f1"
+        "outputId": "bba95f59-0e7b-4d00-f150-f6d32bb8c58d"
       },
       "outputs": [
         {
@@ -224,25 +224,20 @@
     {
       "cell_type": "code",
       "source": [
-        "print(list(api.info()['models'].keys()))"
+        "positivas = ['reina', 'hombre']\n",
+        "negativas = ['mujer']\n",
+        "try:\n",
+        "    resultado_glove = glove_model.most_similar(positive=positivas, negative=negativas, topn=1)\n",
+        "    palabra, score = resultado_glove[0]\n",
+        "    print(f\"Resultado: '{palabra}' (Confianza: {score:.4f})\")\n",
+        "except KeyError as e:\n",
+        "    print(f\"Error: Al menos una de las palabras no existe en el vocabulario del modelo. Detalle: {e}\")"
       ],
       "metadata": {
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        },
-        "id": "eYKVUsB6U6Rd",
-        "outputId": "fee295a0-201c-4aca-edb0-80837641752e"
+        "id": "8CARBfb2d_Sv"
       },
-      "execution_count": 4,
-      "outputs": [
-        {
-          "output_type": "stream",
-          "name": "stdout",
-          "text": [
-            "['fasttext-wiki-news-subwords-300', 'conceptnet-numberbatch-17-06-300', 'word2vec-ruscorpora-300', 'word2vec-google-news-300', 'glove-wiki-gigaword-50', 'glove-wiki-gigaword-100', 'glove-wiki-gigaword-200', 'glove-wiki-gigaword-300', 'glove-twitter-25', 'glove-twitter-50', 'glove-twitter-100', 'glove-twitter-200', '__testing_word2vec-matrix-synopsis']\n"
-          ]
-        }
-      ]
+      "execution_count": null,
+      "outputs": []
     },
     {
       "cell_type": "code",
@@ -252,13 +247,13 @@
         "print(\"¡Vectores GloVe cargados con éxito!\")"
       ],
       "metadata": {
+        "id": "OSpDzygXYbpo",
+        "outputId": "38f2c4d8-d044-422e-c1cc-b27880edb36c",
         "colab": {
           "base_uri": "https://localhost:8080/"
-        },
-        "id": "7wYQtqysVdMi",
-        "outputId": "8f96a540-17a7-48ef-d665-7f132e8b2968"
+        }
       },
-      "execution_count": 5,
+      "execution_count": 3,
       "outputs": [
         {
           "output_type": "stream",
@@ -274,14 +269,52 @@
     {
       "cell_type": "code",
       "source": [
-        "print(list(api.info()['models'].keys()))"
+        "#Cambio de modelo\n",
+        "positivas = ['reina', 'hombre']\n",
+        "negativas = ['mujer']\n",
+        "try:\n",
+        "    resultado_glove = glove_model2.most_similar(positive=positivas, negative=negativas, topn=1)\n",
+        "    palabra, score = resultado_glove[0]\n",
+        "    print(f\"Resultado: '{palabra}' (Confianza: {score:.4f})\")\n",
+        "except KeyError as e:\n",
+        "    print(f\"Error: Al menos una de las palabras no existe en el vocabulario del modelo. Detalle: {e}\")"
       ],
       "metadata": {
+        "id": "HYj2eIh5Y9pl",
+        "outputId": "7eaf70c5-361b-439d-a482-0b9e3e8b578f",
         "colab": {
           "base_uri": "https://localhost:8080/"
-        },
-        "id": "q_bwVHoBVgG7",
-        "outputId": "990c822b-0b5a-4ff7-d893-6e4cc0fc851b"
+        }
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Resultado: 'rey' (Confianza: 0.5876)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "positivas= ['rey', 'mujer']\n",
+        "negativas= ['hombre']\n",
+        "try:\n",
+        "    resultado_glove = glove_model2.most_similar(positive=positivas, negative=negativas, topn=1)\n",
+        "    palabra, score = resultado_glove[0]\n",
+        "    print(f\"Resultado: '{palabra}' (Confianza: {score:.4f})\")\n",
+        "except KeyError as e:\n",
+        "    print(f\"Error: Al menos una de las palabras no existe en el vocabulario del modelo. Detalle: {e}\")"
+      ],
+      "metadata": {
+        "id": "oByGOMn2ZPW-",
+        "outputId": "420ab0b1-0532-48e0-f561-bcdddb01942f",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
       },
       "execution_count": 6,
       "outputs": [
@@ -289,8 +322,83 @@
           "output_type": "stream",
           "name": "stdout",
           "text": [
-            "['fasttext-wiki-news-subwords-300', 'conceptnet-numberbatch-17-06-300', 'word2vec-ruscorpora-300', 'word2vec-google-news-300', 'glove-wiki-gigaword-50', 'glove-wiki-gigaword-100', 'glove-wiki-gigaword-200', 'glove-wiki-gigaword-300', 'glove-twitter-25', 'glove-twitter-50', 'glove-twitter-100', 'glove-twitter-200', '__testing_word2vec-matrix-synopsis']\n"
+            "Resultado: 'lana' (Confianza: 0.6367)\n"
           ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "positivas= ['juego', 'muerte', 'corea', 'netflix']\n",
+        "negativas= ['alegria']\n",
+        "try:\n",
+        "    resultado_glove = glove_model2.most_similar(positive=positivas, negative=negativas, topn=1)\n",
+        "    palabra, score = resultado_glove[0]\n",
+        "    print(f\"Resultado: '{palabra}' (Confianza: {score:.4f})\")\n",
+        "except KeyError as e:\n",
+        "    print(f\"Error: Al menos una de las palabras no existe en el vocabulario del modelo. Detalle: {e}\")"
+      ],
+      "metadata": {
+        "id": "hOdABGwIfa63",
+        "outputId": "1f019f26-8c4e-41a4-8a82-3e551335ee0e",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 51,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Resultado: 'eeuu' (Confianza: 0.5872)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "doesnt_match: metodo que evalua a los vectores de todas las palabras de la lista, calcula el centroide y determuina cual esta mas cercana, identifica la que esta mas lejos."
+      ],
+      "metadata": {
+        "id": "Ty5Zwf5lf0P0"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "similares_glove2 = glove_model2.most_similar('rey', topn=10)\n",
+        "similares_glove2"
+      ],
+      "metadata": {
+        "id": "3dEU-SCTeczY",
+        "outputId": "441a0e19-331a-4e35-c6b1-14c3b93a76c2",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 9,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[('lana', 0.6353307366371155),\n",
+              " ('del', 0.6049522757530212),\n",
+              " ('reina', 0.5769220590591431),\n",
+              " ('el', 0.5588230490684509),\n",
+              " ('madrid', 0.5403395295143127),\n",
+              " ('juan', 0.5298659801483154),\n",
+              " ('miguel', 0.5278103351593018),\n",
+              " ('real', 0.5150784254074097),\n",
+              " ('pepe', 0.5069281458854675),\n",
+              " ('don', 0.5028183460235596)]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 9
         }
       ]
     },
@@ -455,34 +563,6 @@
       ]
     },
     {
-      "cell_type": "code",
-      "source": [
-        "positivas = ['reyna', 'hombre']\n",
-        "negativas = ['mujer']\n",
-        "print(\"Modelo Word2Vec:\")\n",
-        "try:\n",
-        "    resultado_w2v = w2v_model.wv.most_similar(positive=positivas, negative=negativas, topn=1)\n",
-        "    palabra, score = resultado_w2v[0]\n",
-        "    print(f\"Resultado: '{palabra}' (Confianza: {score:.4f})\")\n",
-        "except KeyError as e:\n",
-        "    print(f\" Error: Al menos una de las palabras no existe en el vocabulario del modelo. Detalle: {e}\")\n",
-        "\n",
-        "print(\"\\nModelo GloVe:\")\n",
-        "# Analogía en GloVe\n",
-        "try:\n",
-        "    resultado_glove = glove_model.most_similar(positive=positivas, negative=negativas, topn=1)\n",
-        "    palabra, score = resultado_glove[0]\n",
-        "    print(f\"Resultado: '{palabra}' (Confianza: {score:.4f})\")\n",
-        "except KeyError as e:\n",
-        "    print(f\"Error: Al menos una de las palabras no existe en el vocabulario del modelo. Detalle: {e}\")"
-      ],
-      "metadata": {
-        "id": "DwW3oTPLTzri"
-      },
-      "execution_count": null,
-      "outputs": []
-    },
-    {
       "cell_type": "markdown",
       "metadata": {
         "id": "P6rSKXiaU_Uz"
@@ -554,7 +634,9 @@
     {
       "cell_type": "markdown",
       "source": [
-        "doesnt_match(): Es el método nativo de Gensim diseñado para esta tarea. Calcula la matriz de similitud de coseno promedio entre todas las combinaciones de palabras de la lista y aísla la que tiene la menor similitud respecto al centroide geométrico del grupo."
+        "doesnt_match(): Es el método nativo de Gensim diseñado para esta tarea. Calcula la matriz de similitud de coseno promedio entre todas las combinaciones de palabras de la lista y aísla la que tiene la menor similitud respecto al centroide geométrico del grupo.\n",
+        "\n",
+        "Parecido a Kmeans"
       ],
       "metadata": {
         "id": "Yx-5wn6IEjEV"
